@@ -28,13 +28,11 @@ def get_opencensus_values():
     Return the OpenCensus Trace and Span IDs if Span ID is set in the
     OpenCensus execution context.
     """
-    if execution_context:
-        span_ctx = execution_context.get_opencensus_tracer().span_context
-        span_id = span_ctx.span_id
-        if span_id:
-            # Insert the W3C TraceContext generated
-            w3C_trace_ctx = trace_context_http_header_format.TraceContextPropagator()
-            return w3C_trace_ctx.to_headers(span_ctx)
-    else:
+    if not execution_context:
         raise ImportError('opencensus is not installed.')
+    span_ctx = execution_context.get_opencensus_tracer().span_context
+    if span_id := span_ctx.span_id:
+        # Insert the W3C TraceContext generated
+        w3C_trace_ctx = trace_context_http_header_format.TraceContextPropagator()
+        return w3C_trace_ctx.to_headers(span_ctx)
     return {}

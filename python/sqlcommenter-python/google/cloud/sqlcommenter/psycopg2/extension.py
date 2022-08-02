@@ -49,23 +49,25 @@ def CommenterCursorFactory(
         'driver_paramstyle': with_driver_paramstyle,
     }
 
+
+
     class CommenterCursor(psycopg2.extensions.cursor):
 
         def execute(self, sql, args=None):
             data = dict(
-                # Psycopg2/framework information
-                db_driver='psycopg2:%s' % psycopg2.__version__,
+                db_driver=f'psycopg2:{psycopg2.__version__}',
                 dbapi_threadsafety=psycopg2.threadsafety,
                 dbapi_level=psycopg2.apilevel,
                 libpq_version=psycopg2.__libpq_version__,
                 driver_paramstyle=psycopg2.paramstyle,
             )
 
+
             # Because psycopg2 is a plain database connectivity module,
             # folks using it in a web framework such as flask will
             # use it in unison with flask but initialize the parts disjointly,
             # unlike Django which uses ORMs directly as part of the framework.
-            data.update(get_flask_info())
+            data |= get_flask_info()
 
             # Filter down to just the requested attributes.
             data = {k: v for k, v in data.items() if attributes.get(k)}
@@ -76,12 +78,13 @@ def CommenterCursorFactory(
                     "Only use one to avoid unexpected behavior"
                 )
             if with_opencensus:
-                data.update(get_opencensus_values())
+                data |= get_opencensus_values()
             if with_opentelemetry:
                 data.update(get_opentelemetry_values())
 
             sql += generate_sql_comment(**data)
 
             return psycopg2.extensions.cursor.execute(self, sql, args)
+
 
     return CommenterCursor

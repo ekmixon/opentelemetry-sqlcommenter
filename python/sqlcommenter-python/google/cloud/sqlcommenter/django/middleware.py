@@ -63,22 +63,21 @@ class QueryWrapper:
         resolver_match = self.request.resolver_match
 
         sql_comment = generate_sql_comment(
-            # Information about the controller.
-            controller=resolver_match.view_name if resolver_match and with_controller else None,
-            # route is the pattern that matched a request with a controller i.e. the regex
-            # See https://docs.djangoproject.com/en/stable/ref/urlresolvers/#django.urls.ResolverMatch.route
-            # getattr() because the attribute doesn't exist in Django < 2.2.
-            route=getattr(resolver_match, 'route', None) if resolver_match and with_route else None,
-            # app_name is the application namespace for the URL pattern that matches the URL.
-            # See https://docs.djangoproject.com/en/stable/ref/urlresolvers/#django.urls.ResolverMatch.app_name
-            app_name=(resolver_match.app_name or None) if resolver_match and with_app_name else None,
-            # Framework centric information.
-            framework=('django:%s' % django_version) if with_framework else None,
-            # Information about the database and driver.
+            controller=resolver_match.view_name
+            if resolver_match and with_controller
+            else None,
+            route=getattr(resolver_match, 'route', None)
+            if resolver_match and with_route
+            else None,
+            app_name=(resolver_match.app_name or None)
+            if resolver_match and with_app_name
+            else None,
+            framework=f'django:{django_version}' if with_framework else None,
             db_driver=db_driver if with_db_driver else None,
             **get_opencensus_values() if with_opencensus else {},
-            **get_opentelemetry_values() if with_opentelemetry else {}
+            **get_opentelemetry_values() if with_opentelemetry else {},
         )
+
 
         # TODO: MySQL truncates logs > 1024B so prepend comments
         # instead of statements, if the engine is MySQL.

@@ -58,7 +58,7 @@ class Tests(SQLAlchemyTestCase):
 
     def test_db_framework(self):
         self.assertSQL(
-            "SELECT 1; /*db_framework='sqlalchemy%%3A{}'*/".format(sqlalchemy.__version__),
+            f"SELECT 1; /*db_framework='sqlalchemy%%3A{sqlalchemy.__version__}'*/",
             with_db_framework=True,
         )
 

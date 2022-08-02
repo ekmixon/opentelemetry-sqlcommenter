@@ -31,15 +31,17 @@ def generate_sql_comment(**meta):
     Return a SQL comment with comma delimited key=value pairs created from
     **meta kwargs.
     """
-    if not meta:  # No entries added.
-        return ''
-
-    # Sort the keywords to ensure that caching works and that testing is
-    # deterministic. It eases visual inspection as well.
-    return ' /*' + KEY_VALUE_DELIMITER.join(
-        '{}={!r}'.format(url_quote(key), url_quote(value)) for key, value in sorted(meta.items())
-        if value is not None
-    ) + '*/'
+    return (
+        ' /*'
+        + KEY_VALUE_DELIMITER.join(
+            '{}={!r}'.format(url_quote(key), url_quote(value))
+            for key, value in sorted(meta.items())
+            if value is not None
+        )
+        + '*/'
+        if meta
+        else ''
+    )
 
 
 def url_quote(s):

@@ -36,17 +36,16 @@ def client():
 def test_get_flask_info_in_request_context(client):
     expected = {
         'controller': 'flask_info',
-        'framework': 'flask:%s' % flask.__version__,
+        'framework': f'flask:{flask.__version__}',
         'route': '/flask-info',
     }
+
     resp = client.get('/flask-info')
     assert json.loads(resp.data.decode('utf-8')) == expected
 
 
 def test_get_flask_info_in_404_error_context(client):
-    expected = {
-        'framework': 'flask:%s' % flask.__version__,
-    }
+    expected = {'framework': f'flask:{flask.__version__}'}
     resp = client.get('/doesnt-exist')
     assert json.loads(resp.data.decode('utf-8')) == expected
 

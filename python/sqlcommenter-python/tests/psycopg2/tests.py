@@ -45,31 +45,31 @@ class Tests(Psycopg2TestCase):
 
     def test_db_driver(self):
         self.assertSQL(
-            "SELECT 1; /*db_driver='psycopg2%%3A{}'*/".format(url_quote(psycopg2.__version__)),
+            f"SELECT 1; /*db_driver='psycopg2%%3A{url_quote(psycopg2.__version__)}'*/",
             with_db_driver=True,
         )
 
     def test_dbapi_threadsafety(self):
         self.assertSQL(
-            "SELECT 1; /*dbapi_threadsafety={}*/".format(psycopg2.threadsafety),
+            f"SELECT 1; /*dbapi_threadsafety={psycopg2.threadsafety}*/",
             with_dbapi_threadsafety=True,
         )
 
     def test_driver_paramstyle(self):
         self.assertSQL(
-            "SELECT 1; /*driver_paramstyle='{}'*/".format(psycopg2.paramstyle),
+            f"SELECT 1; /*driver_paramstyle='{psycopg2.paramstyle}'*/",
             with_driver_paramstyle=True,
         )
 
     def test_dbapi_level(self):
         self.assertSQL(
-            "SELECT 1; /*dbapi_level='{}'*/".format(url_quote(psycopg2.apilevel)),
+            f"SELECT 1; /*dbapi_level='{url_quote(psycopg2.apilevel)}'*/",
             with_dbapi_level=True,
         )
 
     def test_libpq_version(self):
         self.assertSQL(
-            "SELECT 1; /*libpq_version={}*/".format(url_quote(psycopg2.__libpq_version__)),
+            f"SELECT 1; /*libpq_version={url_quote(psycopg2.__libpq_version__)}*/",
             with_libpq_version=True,
         )
 

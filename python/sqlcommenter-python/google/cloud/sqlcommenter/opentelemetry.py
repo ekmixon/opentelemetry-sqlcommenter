@@ -31,10 +31,9 @@ def get_opentelemetry_values():
     Return the OpenTelemetry Trace and Span IDs if Span ID is set in the
     OpenTelemetry execution context.
     """
-    if propagator:
-        # Insert the W3C TraceContext generated
-        headers = {}
-        propagator.inject(headers)
-        return headers
-    else:
+    if not propagator:
         raise ImportError("OpenTelemetry is not installed.")
+    # Insert the W3C TraceContext generated
+    headers = {}
+    propagator.inject(headers)
+    return headers

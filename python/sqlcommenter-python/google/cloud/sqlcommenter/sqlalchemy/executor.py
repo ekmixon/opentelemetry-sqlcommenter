@@ -44,11 +44,10 @@ def BeforeExecuteFactory(
 
     def before_cursor_execute(conn, cursor, sql, parameters, context, executemany):
         data = dict(
-            # TODO: Figure out how to retrieve the exact driver version.
             db_driver=conn.engine.driver,
-            # Driver/framework centric information.
-            db_framework='sqlalchemy:%s' % sqlalchemy.__version__,
+            db_framework=f'sqlalchemy:{sqlalchemy.__version__}',
         )
+
 
         # Because sqlalchemy is a plain database connectivity module,
         # folks using it in a web framework such as flask will

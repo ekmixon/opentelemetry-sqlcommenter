@@ -31,7 +31,7 @@ def get_flask_info():
     info = {}
     # https://flask.palletsprojects.com/en/1.1.x/api/#flask.has_request_context
     if flask and request:
-        info['framework'] = 'flask:%s' % flask.__version__
+        info['framework'] = f'flask:{flask.__version__}'
         if request.endpoint:
             info['controller'] = request.endpoint
         if request.url_rule and request.url_rule.rule:
